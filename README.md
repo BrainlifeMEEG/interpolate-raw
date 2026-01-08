@@ -5,25 +5,31 @@
 
 ## Description
 
-Interpolates bad channels in MNE raw data using `mne.io.raw.interpolate_bads()`. Channels marked as bad in the input raw file are spatially interpolated using available methods (spherical spline, etc.), enabling their recovery for downstream analysis.
+Interpolates bad channels in MNE raw data using `mne.io.raw.interpolate_bads()`. Channels marked as bad in the input raw file are spatially interpolated using available methods (spherical spline, etc.), enabling their recovery for downstream analysis. Additional bad channels can be specified via the `bads` configuration parameter.
 
 ## Inputs
 
-- **raw**: Path to MNE raw `.fif` file with bad channels marked
+- **raw**: Path to MNE raw `.fif` file
 
 ## Outputs
 
 - **out_dir/raw.fif**: Raw data with bad channels interpolated
 - **product.json**: Summary of interpolation results including raw info and interpolation summary
 
+## Configuration Parameters
+
+- **raw** (string): Path to input MNE raw `.fif` file
+- **bads** (string, optional): Comma-separated list of channel names to mark as bad before interpolation (e.g., "MEG0111,MEG0112,EEG001"). Channels already marked as bad in the input file plus any specified here will be interpolated. Leave empty to use only channels marked bad in the input file.
+
 ## Usage
 
 The app:
 1. Loads the raw MNE data file
-2. Identifies channels marked as bad
-3. Performs spatial interpolation on bad channels
-4. Saves the resulting raw data with interpolated channels
-5. Generates a product.json with detailed information
+2. Marks additional channels as bad if specified in config
+3. Identifies all channels marked as bad (either in input file or via config)
+4. Performs spatial interpolation on bad channels
+5. Saves the resulting raw data with interpolated channels
+6. Generates a product.json with detailed information
 
 ## Technical Details
 

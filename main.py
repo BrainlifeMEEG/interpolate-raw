@@ -4,10 +4,12 @@ Interpolate bad channels in MNE raw data.
 This app identifies channels marked as bad in the raw data and interpolates
 their values using MNE's interpolate_bads() function. Interpolation is performed
 using spherical spline or other available methods depending on channel types and
-digitized head points.
+digitized head points. Additional bad channels can be specified via configuration.
 
 Input:
-    - raw: Path to MNE raw .fif file
+    - config.json:
+      - raw: Path to MNE raw .fif file
+      - bads: Optional comma-separated list of channel names to mark as bad
 
 Output:
     - out_dir/raw.fif: Raw data with interpolated bad channels
@@ -51,6 +53,17 @@ config = load_config()
 # == LOAD DATA ==
 fname = config['raw']
 raw = mne.io.read_raw_fif(fname, preload=True)
+
+# == MARK ADDITIONAL BAD CHANNELS ==
+# Parse bads from config if provided
+bads_config = config.get('bads', '')
+if bads_config and bads_config != 'None':
+    bads = [ch.strip() for ch in bads_config.split(',')]
+    # Filter to only channels that exist in the raw file
+    bads = [ch for ch in bads if ch in raw.ch_names]
+    if bads:
+        raw.info['bads'].extend(bads)
+        raw.info['bads'] = list(set(raw.info['bads']))  # Remove duplicates
 
 # == INTERPOLATE BAD CHANNELS ==
 bads_before = raw.info['bads'].copy()
