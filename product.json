@@ -1,0 +1,9 @@
+{
+  "brainlife": [
+    {
+      "type": "raw",
+      "name": "raw.fif",
+      "desc": "Raw data with interpolated bad channels in MNE format"
+    }
+  ]
+}
