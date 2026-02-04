@@ -16,13 +16,14 @@ Output:
     - product.json: Summary of interpolation results
 """
 
-# Copyright (c) 2020 brainlife.io
+# Copyright (c) 2026 brainlife.io
 #
 # This app interpolates bad channels in MNE raw data.
 #
-# Author: Guiomar Niso
-# Contributor: Kami Salibayeva
-# Indiana University
+# Authors:
+# - Guiomar Niso (https://github.com/guiomar)
+# - Kamilya Salibayeva (https://github.com/KSalibay)
+# - Maximilien Chaumon (https://github.com/dnacombo)
 
 import sys
 import os
