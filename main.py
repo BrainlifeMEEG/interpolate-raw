@@ -83,8 +83,8 @@ add_raw_info_to_product(product_items, raw)
 # Add interpolation summary
 if bads_before:
     interp_msg = f"Interpolated {len(bads_before)} bad channel(s): {', '.join(bads_before)}"
-    add_info_to_product(product_items, interp_msg)
+    add_info_to_product(product_items, interp_msg, msg_type='success')
 else:
-    add_info_to_product(product_items, "No bad channels to interpolate")
+    add_info_to_product(product_items, "No bad channels to interpolate", msg_type='success')
 
 create_product_json(product_items)
