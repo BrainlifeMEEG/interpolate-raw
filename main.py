@@ -27,6 +27,7 @@ Output:
 
 import sys
 import os
+import matplotlib.plot as plt
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'brainlife_utils'))
 
 # Standard imports
