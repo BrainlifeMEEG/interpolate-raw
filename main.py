@@ -74,6 +74,11 @@ bads_after = raw.info['bads'].copy()
 # == SAVE DATA ==
 raw.save(os.path.join('out_dir', 'raw.fif'), overwrite=True)
 
+# == CREATE PSD PLOT ==
+fig = raw.compute_psd().plot(exclude='bads', show=False)
+fig.savefig(os.path.join('out_figs', 'psd.png'), dpi=100, bbox_inches='tight')
+plt.close(fig)
+
 # == CREATE PRODUCT JSON ==
 product_items = []
 
@@ -86,5 +91,10 @@ if bads_before:
     add_info_to_product(product_items, interp_msg, msg_type='success')
 else:
     add_info_to_product(product_items, "No bad channels to interpolate", msg_type='success')
+    
+# Add PSD plot if it exists
+psd_image_path = os.path.join('out_figs', 'psd.png')
+if os.path.exists(psd_image_path):
+    add_image_to_product(product_items, name='Power Spectral Density (PSD)', filepath=psd_image_path)
 
 create_product_json(product_items)
