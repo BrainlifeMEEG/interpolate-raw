@@ -1,42 +1,54 @@
-# app-interpolate-raw
+# Interpolate Bad Channels in Raw MEG/EEG Data
 
-[![Abcdspec-compliant](https://img.shields.io/badge/ABCD_Spec-v1.1-green.svg)](https://github.com/brain-life/abcd-spec)
-[![Run on Brainlife.io](https://img.shields.io/badge/Brainlife-bl.app.469-blue.svg)](https://doi.org/10.25663/brainlife.app.469)
+[![Run on Brainlife.io](https://img.shields.io/badge/Brainlife-bl.app.816-blue.svg)](https://doi.org/10.25663/brainlife.app.816)
 
 ## Description
 
-Interpolates bad channels in MNE raw data using `mne.io.raw.interpolate_bads()`. Channels marked as bad in the input raw file are spatially interpolated using available methods (spherical spline, etc.), enabling their recovery for downstream analysis. Additional bad channels can be specified via the `bads` configuration parameter.
+Interpolates bad channels in continuous MNE raw MEG/EEG data using `raw.interpolate_bads()` (`mne.io.Raw.interpolate_bads`). Channels already marked as bad in the input raw file — plus any additional channels given via the `bads` configuration parameter — are spatially interpolated using the available method for their channel type (e.g. spherical spline for EEG), enabling their recovery for downstream analysis.
+
+The app generates:
+- Raw data with bad channels interpolated
+- A power spectral density (PSD) plot of the resulting data
+- A `product.json` summary of the interpolation
 
 ## Inputs
 
-- **raw**: Path to MNE raw `.fif` file
+- **`raw`** (`neuro/meeg/mne/raw`): continuous raw data containing the channel(s) to interpolate (required)
 
 ## Outputs
 
-- **out_dir/raw.fif**: Raw data with bad channels interpolated
-- **product.json**: Summary of interpolation results including raw info and interpolation summary
+- **`out_dir/raw.fif`** (`neuro/meeg/mne/raw`): raw data with bad channels interpolated
+- **`out_figs/psd.png`**: power spectral density plot of the interpolated data
+- **`product.json`**: summary of the interpolation, including raw info and the list of channels interpolated
 
 ## Configuration Parameters
 
-- **raw** (string): Path to input MNE raw `.fif` file
-- **bads** (string, optional): Comma-separated list of channel names to mark as bad before interpolation (e.g., "MEG0111,MEG0112,EEG001"). Channels already marked as bad in the input file plus any specified here will be interpolated. Leave empty to use only channels marked bad in the input file.
+| key | type | default | description |
+|---|---|---|---|
+| `bads` | string (optional) | `""` | Comma-separated list of additional channel names to mark as bad before interpolation (e.g. `"MEG0111,MEG0112,EEG001"`). These are combined with any channels already marked bad in the input file. Leave empty to interpolate only the channels already marked bad. |
 
 ## Usage
 
-The app:
-1. Loads the raw MNE data file
-2. Marks additional channels as bad if specified in config
-3. Identifies all channels marked as bad (either in input file or via config)
-4. Performs spatial interpolation on bad channels
-5. Saves the resulting raw data with interpolated channels
-6. Generates a product.json with detailed information
+### Running on Brainlife.io
+
+1. Select a continuous MEG/EEG dataset as the `raw` input.
+2. Optionally set `bads` to mark extra channels for interpolation.
+3. Submit the task.
+4. Review the PSD plot and interpolation summary in the output viewer.
+
+### Local Testing
+
+```bash
+# Update config.json with your data path
+python main.py
+```
 
 ## Technical Details
 
-- **Method**: MNE's `interpolate_bads()` function uses spherical spline interpolation or equivalent methods
-- **Requirements**: Bad channels must be marked in the input raw data (raw.info['bads'])
-- **Preload**: Data is preloaded before interpolation to ensure proper handling
-- **Output format**: Standard MNE `.fif` format compatible with downstream processing
+- **Method**: MNE's `interpolate_bads()` function uses spherical spline interpolation or an equivalent method, depending on channel type and the availability of digitized head points.
+- **Requirements**: Bad channels must be marked in the input raw data (`raw.info['bads']`), either already present in the file or added via the `bads` parameter.
+- **Preload**: Data is preloaded before interpolation to allow in-place modification.
+- **Output format**: Standard MNE `.fif` format compatible with downstream processing.
 
 ## Authors
 - [Guiomar Niso](https://github.com/guiomar)
@@ -47,9 +59,9 @@ The app:
 
 We kindly ask that you cite the following articles when publishing papers and code using this app:
 
-**brainlife.io: A decentralized and open source cloud platform to support neuroscience research**. Hayashi, S., Caron, B. A., et al. & Pestilli, F. (2023). ArXiv. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10274934/
+Hayashi, S., Caron, B.A., Heinsfeld, A.S. et al. brainlife.io: a decentralized and open-source cloud platform to support neuroscience research. Nat Methods 21, 809–813 (2024). https://doi.org/10.1038/s41592-024-02237-2
 
-**MEG and EEG data analysis with MNE-Python**. Gramfort A, et al. & Hämäläinen MS. (2013). Frontiers in Neuroscience, 7(267):1–13. https://doi.org/10.3389/fnins.2013.00267
+Gramfort, A. et al. MEG and EEG data analysis with MNE-Python. Front. Neurosci. 7, 267 (2013). https://doi.org/10.3389/fnins.2013.00267
 
 ## Funding Acknowledgement
 
@@ -59,12 +71,9 @@ brainlife.io is publicly funded and for the sustainability of the project we kin
 [![NSF-BCS-1636893](https://img.shields.io/badge/NSF_BCS-1636893-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1636893)
 [![NSF-ACI-1916518](https://img.shields.io/badge/NSF_ACI-1916518-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1916518)
 [![NSF-IIS-1912270](https://img.shields.io/badge/NSF_IIS-1912270-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1912270)
+[![NIH-NIBIB-R01EB029272](https://img.shields.io/badge/NIH_NIBIB-R01EB029272-green.svg)](https://grantome.com/grant/NIH/R01-EB029272-01)
 [![NIH-NIBIB-R01EB030896](https://img.shields.io/badge/NIH_NIBIB-R01EB030896-green.svg)](https://grantome.com/grant/NIH/R01-EB030896-01)
 
-Copyright (c) 2026 MEEG Brainlife team
+## License
 
-This project is licensed under the AGPL-3.0 License - see [license.txt](license.txt) for details.
-
-## Citation
-
-Hayashi, S., Caron, B.A., Heinsfeld, A.S. et al. brainlife.io: a decentralized and open-source cloud platform to support neuroscience research. Nat Methods 21, 809–813 (2024). https://doi.org/10.1038/s41592-024-02237-2
+Copyright (c) 2026 MEEG Brainlife team. Licensed under AGPL-3.0, see [license.txt](license.txt).
