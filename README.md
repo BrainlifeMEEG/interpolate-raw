@@ -1,5 +1,46 @@
 # Interpolate Bad Channels in Raw MEG/EEG Data
 
+<!-- brainlife-app:begin (generated from the App manifest; edit the manifest, not this block) -->
+
+> **Interpolates bad channels in raw MEG/EEG data with MNE-Python interpolate_bads and outputs the repaired raw .fif with a PSD plot.**
+
+Combines the channels already marked bad in the file with any listed in the bads parameter and reconstructs them with raw.interpolate_bads (spherical splines for EEG, field mapping for MEG). Use it after marking bad channels and before analyses that need a complete channel set. Bad channels must be marked in the input or given via bads; channel positions are required.
+
+| | |
+|---|---|
+| 📥 **Inputs** | `neuro/meeg/mne/raw` |
+| 📤 **Outputs** | `neuro/meeg/mne/raw` |
+| 🐳 **Container** | `brainlifemeeg/mne:1.12.1` |
+| ⚙️ **Resources** | 1 CPUs |
+| 🔗 **Run it** | [doi.org/10.25663/brainlife.app.816](https://doi.org/10.25663/brainlife.app.816) |
+
+#### 📥 Inputs
+
+| Input | Datatype | Required | Description |
+|---|---|---|---|
+| `raw` | `neuro/meeg/mne/raw` | yes | Continuous MEG/EEG data in MNE raw .fif format. Bad channels must be listed in info['bads'] or in the bads parameter; sensor positions are needed for interpolation. |
+
+#### 📤 Outputs
+
+| Output | Datatype | Description |
+|---|---|---|
+| `out_dir` | `neuro/meeg/mne/raw` | Raw data (raw.fif) with the bad channels interpolated. |
+
+<details>
+<summary><b>⚙️ Parameters</b> (1)</summary>
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `bads` | string |  | Optional list of bad channels to interpolate (in addition to those listed in the dataset raw.info['bads']) |
+
+</details>
+
+📚 **References used by this App:**
+- Hayashi S, Caron BA, Heinsfeld AS, et al. brainlife.io: a decentralized and open-source cloud platform to support neuroscience research. Nat Methods 21:809-813 (2024). [doi:10.1038/s41592-024-02237-2](https://doi.org/10.1038/s41592-024-02237-2)
+- Gramfort A, et al. MEG and EEG data analysis with MNE-Python. Front Neurosci 7:267 (2013). [doi:10.3389/fnins.2013.00267](https://doi.org/10.3389/fnins.2013.00267)
+
+<!-- brainlife-app:end -->
+
 [![Run on Brainlife.io](https://img.shields.io/badge/Brainlife-bl.app.816-blue.svg)](https://doi.org/10.25663/brainlife.app.816)
 
 ## Description
